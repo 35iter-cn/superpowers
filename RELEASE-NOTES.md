@@ -1,5 +1,11 @@
 # Superpowers Release Notes
 
+## v5.1.1 (2026-05-07)
+
+### Changed
+
+- **writing-plans: restore automatic subagent-driven execution** — the execution handoff once again proceeds directly to `subagent-driven-development` without prompting the user to choose between subagent-driven and inline execution. The v5.0.5 change that made this a user choice ("recommended but no longer mandatory") has been reverted. `executing-plans` remains the fallback for harnesses without subagent support.
+
 ## v5.1.0 (2026-04-30)
 
 ### Removals
