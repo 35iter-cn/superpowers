@@ -5,15 +5,67 @@ description: Use when the user has an existing spec or requirements document and
 
 # Implement Spec
 
-## Overview
-
+<objective>
 Orchestrate the full pipeline from spec to working implementation: plan, review, execute. **Never skip a stage.** Each stage is a hard gate.
 
 **Core principle:** Spec → Plan → Review → Execute. Zero shortcuts.
 
 **Announce:** "Using implement-spec to plan, review, and implement."
+</objective>
 
-## The Pipeline
+<execution_context>
+Required:
+- superpowers:writing-plans (Stage 1 — plan generation)
+- superpowers:executing-plans (Stage 3 — task execution)
+- karpathy-guidelines (all stages — think, surgical, goal-driven)
+
+Also:
+- superpowers:using-git-worktrees (isolated workspace)
+- superpowers:test-driven-development (test-first within stages)
+</execution_context>
+
+<critical_rules>
+- Never write code before the plan exists on disk
+- Never start execution before Stage 2 review passes
+- Never skip the plan review — the user seeming "impatient" is not a valid reason
+- Never accept placeholders (TBD, TODO) in the plan
+- Never proceed with ambiguous requirements — ask before guessing
+- Never touch code outside the scope of the current task
+- Never mark a task complete without running its verification step
+- Never add features, abstractions, or "nice-to-haves" not in the spec
+- Never refactor or reformat code your changes didn't touch
+</critical_rules>
+
+<success_criteria>
+- Plan covers every spec requirement with no gaps
+- Review checklist: all 10 checks pass before execution
+- Each task has a verifiable success criterion with explicit verification command
+- All verification commands pass before the task is marked complete
+- No scope creep — only what the spec asked for has been implemented
+</success_criteria>
+
+<process>
+Execute these stages in strict order. Each stage is a hard gate — do not proceed until the current stage is complete.
+
+### Stage 1: Write Plan
+1. Invoke `superpowers:writing-plans` with the spec as input
+2. Apply karpathy-guidelines: surface assumptions, ask before guessing, design minimum viable path
+3. Save plan to disk — do NOT proceed until plan file exists
+
+### Stage 2: Review Plan
+1. Run the 10-point review checklist against the plan and original spec
+2. If ANY check fails: fix the plan inline, re-review
+3. Only when all checks pass → proceed to Stage 3
+
+### Stage 3: Execute Plan
+1. Load the reviewed plan
+2. Invoke `superpowers:executing-plans`
+3. Execute tasks in order, exactly as specified
+4. Run verification command after each task before marking complete
+5. Stop when blocked — do not skip, reorder, or batch tasks
+</process>
+
+## Pipeline
 
 ```dot
 digraph pipeline {
@@ -74,18 +126,7 @@ Explicit review of the written plan against the original spec — not a mental c
 - **Surgical Changes:** Touch only code required by the task. Don't "improve" adjacent code or formatting.
 - **Goal-Driven:** Execute the task's verification step before marking it complete. No "looks good" — prove it.
 
-**Choose execution mode autonomously.** Do NOT ask the user which mode to use. Decide based on:
-
-```dot
-digraph execution_decision {
-    "Task count and complexity?" [shape=diamond];
-    "Use subagent-driven-development" [shape=box];
-    "Use executing-plans" [shape=box];
-
-    "Task count and complexity?" -> "Use subagent-driven-development" [label="Multiple tasks OR high complexity AND subagent support available"];
-    "Task count and complexity?" -> "Use executing-plans" [label="Single task AND low complexity OR no subagent support"];
-}
-```
+**REQUIRED SUB-SKILL:** Use `superpowers:executing-plans`
 
 Load the reviewed plan, execute tasks in order, follow steps exactly, run verifications, stop when blocked.
 
@@ -100,8 +141,7 @@ Load the reviewed plan, execute tasks in order, follow steps exactly, run verifi
 | "Tests after achieve same goal" | Tests prove code works; review proves plan is correct |
 | "Plan Self-Review is enough" | Self-Review checks plan quality; Stage 2 checks spec alignment |
 | "writing-plans auto-executes" | Override auto-execution. Insert explicit review gate. |
-| "Subagent is overkill" | Fresh context per task prevents cross-task pollution and reduces errors |
-| "I'll just run it directly" | Direct execution burns context and increases rationalization risk |
+| "I'll just run it directly" | Follow the reviewed plan through `superpowers:executing-plans`; don't bypass the execution gate |
 | "加个配置选项更灵活" | Unrequested flexibility violates Simplicity First. Add only what the spec asks. |
 | "顺手重构一下相邻代码" | Surgical Changes: only touch code directly required by the task. Mention dead code, don't delete it. |
 | "这个假设很明显，不需要问" | Think Before Coding: obvious to you ≠ obvious to others. Surface all assumptions explicitly. |
@@ -115,8 +155,6 @@ Load the reviewed plan, execute tasks in order, follow steps exactly, run verifi
 - "Close enough" on spec coverage
 - Skipping review because "user seems impatient"
 - Proceeding with placeholders in the plan
-- Executing directly when subagent support is available
-- Skipping two-stage review in subagent mode
 - Designing tasks for features not in the spec
 - Proceeding with ambiguous requirements instead of asking
 - Deleting or refactoring code your changes didn't touch
@@ -126,5 +164,4 @@ Load the reviewed plan, execute tasks in order, follow steps exactly, run verifi
 ## Integration
 
 **Required:** `superpowers:writing-plans` (Stage 1), `superpowers:executing-plans` (Stage 3), `karpathy-guidelines` (all stages)
-**Preferred:** `superpowers:subagent-driven-development` (Stage 3)
 **Also:** `superpowers:using-git-worktrees`, `superpowers:test-driven-development`
