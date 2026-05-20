@@ -1,16 +1,16 @@
 ---
-name: implement-spec
+name: implement-specs
 description: Use when the user has an existing spec or requirements document and wants it implemented end-to-end (plan, review, then code). Not for brainstorming-only or spec-less feature requests.
 ---
 
-# Implement Spec
+# Implement Specs
 
 <objective>
 Orchestrate the full pipeline from spec to working implementation: plan, review, execute. **Never skip a stage.** Each stage is a hard gate.
 
 **Core principle:** Spec → Plan → Review → Execute. Zero shortcuts.
 
-**Announce:** "Using implement-spec to plan, review, and implement."
+**Announce:** "Using implement-specs to plan, review, and implement."
 </objective>
 
 <execution_context>

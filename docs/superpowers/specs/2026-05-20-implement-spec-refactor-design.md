@@ -1,14 +1,14 @@
 ---
 date: 2026-05-20
 project: superpowers
-tags: [implement-spec, skill-refactor, gsd, subagent-ban]
+tags: [implement-specs, skill-refactor, gsd, subagent-ban]
 ---
 
 # Implement Spec Skill 重构设计
 
 ## Motivation
 
-对 `implement-spec` skill 进行结构化升级，解决两个问题：
+对 `implement-specs` skill 进行结构化升级，解决两个问题：
 
 1. **禁止 subagent 执行模式** — 当前 Stage 3 允许 agent 自主选择 `subagent-driven-development` 或 `executing-plans`，但从实际效果看 subagent 模式在此场景下弊大于利（详见下文）。
 2. **采用 GSD XML 风格结构化编排** — 将 prose 章节改造成语义标签体系，让约束前置、依赖显式化、完成定义可检查。
@@ -41,8 +41,8 @@ digraph execution_decision {
 
 - subagent 模式在此场景下导致计划漂移 — 子代理看不到完整的 review 上下文，容易在边界上理解和原计划偏离
 - 增加了跨 subagent 的信息传递损耗，经常需要额外回合对齐
-- 违背了 implement-spec 的核心原则"不跳过 review gate" — subagent 的独立上下文使其无法感知 Stage 2 review 时做的关键决策
-- 用户实际使用反馈验证了这一点：subagent 在 implement-spec 场景下弊大于利
+- 违背了 implement-specs 的核心原则"不跳过 review gate" — subagent 的独立上下文使其无法感知 Stage 2 review 时做的关键决策
+- 用户实际使用反馈验证了这一点：subagent 在 implement-specs 场景下弊大于利
 
 **改为：**
 
@@ -173,7 +173,7 @@ Execute these stages in strict order. Each stage is a hard gate — do not proce
 
 ```markdown
 ---
-name: implement-spec
+name: implement-specs
 description: ...
 ---
 
